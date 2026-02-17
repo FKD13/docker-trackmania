@@ -1,8 +1,17 @@
 # build trackmania_exporter
 FROM python:3.14.3-alpine3.23 AS exporter-build
 WORKDIR /build
-COPY trackmania_exporter .
-RUN apk upgrade && apk add binutils && pip3 install --root-user-action=ignore prometheus-client pyinstaller && pyinstaller --onefile --console --clean --strip trackmania_exporter.py
+
+RUN apk upgrade && apk add binutils upx && pip3 install --no-cache-dir uv
+
+COPY trackmania_exporter/uv.lock .
+COPY trackmania_exporter/pyproject.toml .
+
+RUN uv sync --group build
+
+COPY trackmania_exporter/*.py .
+
+RUN uv run pyinstaller --onefile --console --clean --strip trackmania_exporter.py
 
 # build trackmania image
 FROM alpine:3.23

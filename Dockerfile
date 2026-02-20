@@ -16,8 +16,7 @@ RUN uv run pyinstaller --onefile --console --clean --strip trackmania_exporter.p
 # build trackmania image
 FROM alpine:3.23
 
-ARG GLIBC_VERSION="2.33-r0" \
-    TMSERVER_VERSION="Latest" \
+ARG TMSERVER_VERSION="Latest" \
     VERSION \
     BUILD_DATE \
     REVISION
